@@ -1,0 +1,7 @@
+{
+  "name": "gh-release-branch-status",
+  "alias": "gh-release-branch-status",
+  "env": {
+    "GH_TOKEN": "@gh-token"
+  }
+}
