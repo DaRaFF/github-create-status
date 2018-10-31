@@ -38,7 +38,7 @@ const run = async (req, res) => {
   const pullRequestNumber = _.get(pullRequests, 'data.items[0].number', false)
 
   if (!pullRequestNumber) {
-    return send(res, 401, `no pull request foun with commit ${sha} `)
+    return send(res, 401, `no pull request found with commit ${sha} `)
   }
 
   const pr = await o.getPullRequest({repository, number: pullRequestNumber})
