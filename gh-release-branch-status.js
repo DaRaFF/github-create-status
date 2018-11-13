@@ -7,6 +7,7 @@ const {json, send} = require('micro')
 const conventionalCommits = require('semantic-release-conventional-commits')
 const {isValidSha, isValidRepository} = require('./validation')
 const OctokitHelper = require('./octokit_helper')
+const githubGetPullRequest = require('@daraff/github-get-pull-request')
 
 assert(process.env.GH_TOKEN, 'missing environment variable GH_TOKEN e.g 11b22b33n4')
 const token = process.env.GH_TOKEN
@@ -31,20 +32,28 @@ const run = async (req, res) => {
   if (!isValidRepository(repository, res)) return
   if (!isValidSha(sha, res)) return
 
-  const pullRequests = await o.searchPullRequest({repository, sha})
+
+  // const pullRequests = await o.searchPullRequest({repository, sha})
+  //   .catch((e) => {
+  //     return send(res, 400, e)
+  //   })
+  // const pullRequestNumber = _.get(pullRequests, 'data.items[0].number', false)
+  //
+  // if (!pullRequestNumber) {
+  //   return send(res, 401, `no pull request found with commit ${sha} `)
+  // }
+  //
+  // const pr = await o.getPullRequest({repository, number: pullRequestNumber})
+  //   .catch((e) => {
+  //     return send(res, 400, e)
+  //   })
+
+  const pr = await githubGetPullRequest()
     .catch((e) => {
       return send(res, 400, e)
     })
-  const pullRequestNumber = _.get(pullRequests, 'data.items[0].number', false)
 
-  if (!pullRequestNumber) {
-    return send(res, 401, `no pull request found with commit ${sha} `)
-  }
-
-  const pr = await o.getPullRequest({repository, number: pullRequestNumber})
-    .catch((e) => {
-      return send(res, 400, e)
-    })
+  console.log('pr', pr)
 
   const baseBranchName = pr.data.base.ref
 
