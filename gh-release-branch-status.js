@@ -8,6 +8,7 @@ const conventionalCommits = require('semantic-release-conventional-commits')
 const {isValidSha, isValidRepository} = require('./validation')
 const OctokitHelper = require('./octokit_helper')
 const githubGetPullRequest = require('@daraff/github-get-pull-request')
+const allowedRepositories = require('./allowed_repositories')
 
 assert(process.env.GH_TOKEN, 'missing environment variable GH_TOKEN e.g 11b22b33n4')
 const token = process.env.GH_TOKEN
@@ -48,7 +49,12 @@ const run = async (req, res) => {
   //     return send(res, 400, e)
   //   })
 
-  const pr = await githubGetPullRequest()
+  const pr = await githubGetPullRequest({
+    token,
+    owner: allowedRepositories[repository].repoOwner,
+    repo: allowedRepositories[repository].repo,
+    sha
+  })
     .catch((e) => {
       return send(res, 400, e)
     })
