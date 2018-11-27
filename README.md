@@ -11,16 +11,24 @@ This is a small helper service to add a check to the github status for release b
 ```
 # start the service locally
 GH_TOKEN=<your token> npm run start
-curl -d '{"repository":"livingdocs-editor","sha":"your-sha"}' -H "Content-Type: application/json" -X POST localhost:3000
+
+# call the service locally
+curl -d '{"repository":"livingdocs-editor","sha":"your-sha"}' \
+  -H "Content-Type: application/json" \
+  -X POST localhost:3000
 ```
 
 ### Call the Service via Command Line
 ```
-curl -d '{"repository":"livingdocs-editor","sha":"your-sha"}' -H "Content-Type: application/json" -X POST https://gh-release-branch-status.now.sh
+curl -d '{"repository":"livingdocs-editor","sha":"your-sha"}' \
+  -H "Content-Type: application/json" \
+  -X POST https://gh-release-branch-status.now.sh
 ```
 
 
 ### Call the Service via Travis
 ```
-curl -d "{\"repository\":\"livingdocs-editor\",\"sha\":\"$TRAVIS_COMMIT\"}" -H "Content-Type: application/json" -X POST https://gh-release-branch-status.now.sh
+curl -d "{\"repository\":\"livingdocs-editor\",\"sha\":\"$TRAVIS_COMMIT\"}" \
+  -H "Content-Type: application/json" \
+  -X POST https://gh-release-branch-status.now.sh
 ```
