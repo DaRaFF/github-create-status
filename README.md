@@ -15,6 +15,7 @@ GH_TOKEN=<your token> npm run start
 # call the service locally
 curl -d '{"repository":"livingdocs-editor","sha":"your-sha"}' \
   -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
   -X POST localhost:3000
 ```
 
@@ -22,13 +23,16 @@ curl -d '{"repository":"livingdocs-editor","sha":"your-sha"}' \
 ```
 curl -d '{"repository":"livingdocs-editor","sha":"your-sha"}' \
   -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
   -X POST https://gh-release-branch-status.now.sh
 ```
 
 
 ### Call the Service via Travis
 ```
-curl -d "{\"repository\":\"livingdocs-editor\",\"sha\":\"$TRAVIS_COMMIT\"}" \
-  -H "Content-Type: application/json" \
-  -X POST https://gh-release-branch-status.now.sh
+- |
+  echo $(curl -d "{\"repository\":\"livingdocs-editor\",\"sha\":\"$TRAVIS_COMMIT\"}" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -X POST https://gh-release-branch-status.now.sh)
 ```
