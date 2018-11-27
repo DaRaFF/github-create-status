@@ -16,7 +16,7 @@ const isReleaseBranch = (name) => {
   if (RegExp(`^release-([0-9]{4})-(0[1-9]|1[0-2])$`, 'gi')
     .test(name)) return true
   // release-v.45.2.11
-  if (RegExp(`^release-v([0-9]{1,3}).([0-9]{1,3}).([0-9]{1,3})$`, 'gi')
+  if (RegExp(`^release-v?([0-9]{1,3}).([0-9]{1,3}).([0-9]{1,3})$`, 'gi')
     .test(name)) return true
   return false
 }
