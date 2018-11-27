@@ -1,10 +1,18 @@
 const octokit = require('@octokit/rest')()
 const allowedRepositories = require('./allowed_repositories')
 const states = {
-  'error': 'only patch version commits are allowed in release branches',
-  'failure': 'failure',
-  'pending': 'pending',
-  'success': 'success'
+  'error': {
+    ghState: 'error',
+    description: 'only patch commits allowed'
+  },
+  'success': {
+    ghState: 'success',
+    description: 'success - commits are valid'
+  },
+  'no-release-branch': {
+    ghState: 'success',
+    description: 'success - no release branch'
+  }
 }
 
 module.exports = class OctokitHelper {
@@ -22,8 +30,8 @@ module.exports = class OctokitHelper {
       owner: allowedRepositories[repository].repoOwner,
       repo: allowedRepositories[repository].repo,
       sha: sha,
-      state: state, // error, failure, pending, success
-      description: states[state],
+      state: states[state].ghState, // error, failure, pending, success
+      description: states[state].description,
       context: 'Semantic Release'
     })
   }

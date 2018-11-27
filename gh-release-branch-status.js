@@ -28,7 +28,7 @@ const commitConfig = {
 
 // main application
 const run = async (req, res) => {
-  let state = 'success'
+  let state
   const o = new OctokitHelper(token)
   const js = await json(req)
   const {repository, sha} = js
@@ -61,11 +61,14 @@ const run = async (req, res) => {
     const commits = _.map(prComments.data, (c) => c.commit)
 
     const type = await conventionalCommits(commitConfig, {commits})
-    console.log('type', type)
 
     if (type !== 'patch') {
       state = 'error'
+    } else {
+      state = 'success'
     }
+  } else {
+    state = 'no-release-branch'
   }
 
   await o.createStatus({repository, sha, state})
