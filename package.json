@@ -3,15 +3,13 @@
   "version": "1.0.0",
   "bin": "./gh-release-branch-status.js",
   "main": "./gh-release-branch-status.js",
-  "scripts": {
-    "start": "micro"
-  },
   "dependencies": {
     "lodash": "^4.17.4",
     "micro": "latest",
     "micro-cors": "latest",
     "semver": "5.5.1",
     "@octokit/rest": "^15.9.4",
-    "semantic-release-conventional-commits": "latest"
+    "semantic-release-conventional-commits": "latest",
+    "moment": "^2.24.0"
   }
 }

@@ -1,7 +1,14 @@
 {
+  "version": 2,
   "name": "gh-release-branch-status",
   "alias": "gh-release-branch-status",
+  "builds": [
+    { "src": "api/**/*.js", "use": "@now/node" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "api/gh-release-branch-status.js" }
+  ],
   "env": {
-    "GH_TOKEN": "@gh-token"
+    "GH_TOKEN": "@gh_token"
   }
 }

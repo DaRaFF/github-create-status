@@ -2,11 +2,10 @@
 
 const _ = require('lodash')
 const assert = require('assert')
-const microCors = require('micro-cors')
 const {json, send} = require('micro')
 const conventionalCommits = require('semantic-release-conventional-commits')
-const {isValidSha, isValidRepository} = require('./validation')
-const OctokitHelper = require('./octokit_helper')
+const {isValidSha, isValidRepository} = require('../lib/validation')
+const OctokitHelper = require('../lib/octokit_helper')
 
 assert(process.env.GH_TOKEN, 'missing environment variable GH_TOKEN e.g 11b22b33n4')
 const token = process.env.GH_TOKEN
@@ -75,9 +74,9 @@ const run = async (req, res) => {
     .catch((e) => {
       return send(res, 400, `failed to update github check on pr ${pr.data.html_url} `)
     })
-  return send(res, 200, `github check updated on pr ${pr.data.html_url} `)
+  return send(res, 200, `github check updated on pr ${pr.data.html_url} . cya l8er`)
 }
 
-
-const cors = microCors({allowMethods: ['POST']})
-module.exports = cors(run)
+module.exports = (req, res) => {
+  run(req, res)
+}
