@@ -5,7 +5,7 @@ const assert = require('assert')
 const {json, send} = require('micro')
 const conventionalCommits = require('semantic-release-conventional-commits')
 const {isValidSha, isValidRepository} = require('../lib/validation')
-const OctokitHelper = require('../lib/octokit_helper')
+const OctokitHelper = require('../lib/octokit_helper').OctokitHelper
 
 assert(process.env.GH_TOKEN, 'missing environment variable GH_TOKEN e.g 11b22b33n4')
 const token = process.env.GH_TOKEN
@@ -50,7 +50,8 @@ module.exports = async (req, res) => {
       return send(res, 400, e)
     })
 
-  const baseBranchName = pr.data.base.ref
+  const baseBranchName = _.get(pr, 'data.base.ref', false)
+  const pullRequestUrl = _.get(pr, 'data.html_url', false)
 
   if (isReleaseBranch(baseBranchName)) {
     const prComments = await o.getPullRequestCommits({repository, number: pullRequestNumber})
@@ -72,7 +73,7 @@ module.exports = async (req, res) => {
 
   await o.createStatus({repository, sha, state})
     .catch((e) => {
-      return send(res, 400, `failed to update github check on pr ${pr.data.html_url} `)
+      return send(res, 400, `failed to update github check on pr ${pullRequestUrl} `)
     })
-  return send(res, 200, `github check updated on pr ${pr.data.html_url} . cya l8er`)
+  return send(res, 200, `github check updated on pr ${pullRequestUrl} .`)
 }

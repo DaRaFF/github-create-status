@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "bin": "./gh-release-branch-status.js",
   "main": "./gh-release-branch-status.js",
+  "scripts": {
+    "test": "GH_TOKEN=1234 mocha"
+  },
   "dependencies": {
     "lodash": "^4.17.4",
     "micro": "latest",
@@ -11,5 +14,12 @@
     "@octokit/rest": "^15.9.4",
     "semantic-release-conventional-commits": "latest",
     "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "request-promise": "^4.2.4",
+    "sinon": "^7.3.2",
+    "test-listen": "^1.1.0"
   }
 }
