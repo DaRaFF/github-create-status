@@ -26,7 +26,7 @@ const commitConfig = {
 }
 
 // main application
-const run = async (req, res) => {
+module.exports = async (req, res) => {
   let state
   const o = new OctokitHelper(token)
   const js = await json(req)
@@ -75,8 +75,4 @@ const run = async (req, res) => {
       return send(res, 400, `failed to update github check on pr ${pr.data.html_url} `)
     })
   return send(res, 200, `github check updated on pr ${pr.data.html_url} . cya l8er`)
-}
-
-module.exports = (req, res) => {
-  run(req, res)
 }

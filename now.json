@@ -3,7 +3,7 @@
   "name": "gh-release-branch-status",
   "alias": "gh-release-branch-status",
   "builds": [
-    { "src": "api/**/*.js", "use": "@now/node" }
+    { "src": "api/*.js", "use": "@now/node" }
   ],
   "routes": [
     { "src": "/", "dest": "api/gh-release-branch-status.js" }
