@@ -2,14 +2,13 @@
 
 const _ = require('lodash')
 const assert = require('assert')
-const {json, send} = require('micro')
 const conventionalCommits = require('semantic-release-conventional-commits')
 const {isValidSha, isValidRepository} = require('../lib/validation')
 const OctokitHelper = require('../lib/octokit_helper').OctokitHelper
 const isReleaseBranch = require('../lib/is_release_branch')
 
-assert(process.env.GH_TOKEN, 'missing environment variable GH_TOKEN e.g 11b22b33n4')
-const token = process.env.GH_TOKEN
+assert(process.env.GITHUB_TOKEN, 'missing environment variable GITHUB_TOKEN e.g 11b22b33n4')
+const token = process.env.GITHUB_TOKEN
 
 const commitConfig = {
   minorTypes: ['feat', 'feature'],
@@ -18,41 +17,39 @@ const commitConfig = {
 
 // main application
 module.exports = async (req, res) => {
+  try {
+    await run(req, res)
+  } catch (error) {
+    return res.status(400).json({ error: error.message })
+  }
+}
+
+async function run (req, res) {
   let state
   const o = new OctokitHelper(token)
-  const js = await json(req)
-  const {repository, sha} = js
+  const {repository, sha} = req.body
 
   if (!isValidRepository(repository, res)) return
   if (!isValidSha(sha, res)) return
-  
+
   const pullRequests = await o.searchPullRequest({repository, sha})
-  .catch((e) => {
-    return send(res, 400, e)
-  })
   const pullRequestNumber = _.get(pullRequests, 'data.items[0].number', false)
-  
+
   if (!pullRequestNumber) {
-    return send(res, 401, `no pull request found with commit ${sha} `)
+    return res.status(401).json({message: `no pull request found with commit ${sha} `})
   }
-  
+
   const pr = await o.getPullRequest({repository, number: pullRequestNumber})
-  .catch((e) => {
-    return send(res, 400, e)
-  })
-  
+
   const baseBranchName = _.get(pr, 'data.base.ref', false)
   const pullRequestUrl = _.get(pr, 'data.html_url', false)
-  
+
   if (isReleaseBranch(baseBranchName)) {
     const prComments = await o.getPullRequestCommits({repository, number: pullRequestNumber})
-    .catch((e) => {
-      return send(res, 400, e)
-    })
     const commits = _.map(prComments.data, (c) => c.commit)
-    
+
     const type = await conventionalCommits(commitConfig, {commits})
-    
+
     if (type !== 'patch') {
       state = 'error'
     } else {
@@ -65,7 +62,7 @@ module.exports = async (req, res) => {
   try {
     await o.createStatus({repository, sha, state})
   } catch (e) {
-    return send(res, 400, `failed to update github check on pr ${pullRequestUrl} `)
+    return res.status(400).json({message: `failed to update github status '${state}' on pull request ${pullRequestUrl}`})
   }
-  return send(res, 200, `github check updated on pr ${pullRequestUrl} .`)
+  return res.status(200).json({message: `github check updated with status '${state}' on pull request ${pullRequestUrl} .`})
 }

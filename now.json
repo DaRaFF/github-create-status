@@ -7,8 +7,5 @@
   ],
   "routes": [
     { "src": "/", "dest": "api/gh-release-branch-status.js" }
-  ],
-  "env": {
-    "GH_TOKEN": "@gh_token"
-  }
+  ]
 }
