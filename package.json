@@ -8,10 +8,9 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "micro": "latest",
-    "micro-cors": "latest",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5",
     "semver": "5.5.1",
-    "@octokit/rest": "^15.9.4",
     "semantic-release-conventional-commits": "latest",
     "moment": "^2.24.0"
   },
