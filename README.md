@@ -10,7 +10,8 @@ This is a small helper service to add a check to the github status for release b
 ### Local Development
 ```
 # start the service locally
-GH_TOKEN=<your token> npm run start
+vercel env pull
+vercel dev
 
 # call the service locally
 curl -d '{"repository":"livingdocs-editor","sha":"your-sha"}' \
@@ -24,7 +25,7 @@ curl -d '{"repository":"livingdocs-editor","sha":"your-sha"}' \
 curl -d '{"repository":"livingdocs-editor","sha":"your-sha"}' \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -X POST https://gh-release-branch-status.now.sh
+  -X POST https://gh-release-branch-status.vercel.app
 ```
 
 
@@ -34,5 +35,5 @@ curl -d '{"repository":"livingdocs-editor","sha":"your-sha"}' \
   echo $(curl -d "{\"repository\":\"livingdocs-editor\",\"sha\":\"$TRAVIS_COMMIT\"}" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -X POST https://gh-release-branch-status.now.sh)
+    -X POST https://gh-release-branch-status.vercel.app)
 ```
