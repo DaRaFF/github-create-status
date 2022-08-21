@@ -5,7 +5,7 @@
   "main": "./gh-release-branch-status.js",
   "engines" : { 
     "node" : ">=16.0.0"
-  }
+  },
   "scripts": {
     "test": "GH_TOKEN=1234 mocha"
   },
