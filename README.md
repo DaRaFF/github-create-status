@@ -7,6 +7,42 @@ This is a small helper service to add a check to the github status for release b
 
 # How to use
 
+### Add Semantic Release Check on Github
+
+![image](https://github.com/livingdocsIO/livingdocs-server/assets/172394/367ce840-8ad9-4480-8e0b-c0b98e0d5194)
+
+1) Add script to drone.yml on a push event (usually in the linting step)
+
+```yaml
+steps:
+- ...
+
+  # update semantic release status on github
+- name: verify-commit-messages
+  image: livingdocs/node:20
+  when: {event: [pull_request]}
+  commands:
+    - |
+      echo $(curl -s -d "{\"repository\":\"livingdocs-20min\",\"sha\":\"$DRONE_COMMIT_SHA\"}" \
+        -H "Content-Type: application/json" \
+        -H "Accept: application/json" \
+        -X POST https://gh-release-branch-status.vercel.app)
+
+trigger:
+  event: [push]
+```
+
+2) Add your repository into `allowed_repositories.js`
+3) Open a PR on Github (e.g. to the main branch)
+4) Start local development and call the service locally (see below)
+5) Go to the Github Settings and add the status check "Semantic Release" to your Branch Protection Rules
+
+![image](https://github.com/livingdocsIO/livingdocs-20min/assets/172394/4859242c-512b-476a-accb-a8fcb1938e99)
+
+6) Commit the changes in github-create-status repo to master
+
+
+
 ### Local Development
 ```
 # start the service locally
