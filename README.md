@@ -11,7 +11,7 @@ This is a small helper service to add a check to the github status for release b
 
 ![image](https://github.com/livingdocsIO/livingdocs-server/assets/172394/367ce840-8ad9-4480-8e0b-c0b98e0d5194)
 
-1) Add script to drone.yml on a push event (usually in the linting step)
+1) Add script to drone.yml (usually in the linting step). Attention: If there is a common trigger like `trigger: event: [push]`, the script will not be executed.
 
 ```yaml
 steps:
@@ -27,9 +27,6 @@ steps:
         -H "Content-Type: application/json" \
         -H "Accept: application/json" \
         -X POST https://gh-release-branch-status.vercel.app)
-
-trigger:
-  event: [push]
 ```
 
 2) Add your repository into `allowed_repositories.js`
