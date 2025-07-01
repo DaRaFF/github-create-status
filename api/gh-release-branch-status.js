@@ -24,11 +24,11 @@ module.exports = async (req, res) => {
     await run(req, res)
   } catch (error) {
     console.log('error', error)
-    return res.status(400).json({ error: error.message })
+    return res.status(400).json({error: error.message})
   }
 }
 
-async function run (req, res) {
+async function run(req, res) {
   let state
   const {repository, sha} = req.body
 
@@ -63,5 +63,7 @@ async function run (req, res) {
   }
 
   await createCommitStatus({repository, token, sha, state})
-  res.status(200).json({message: `github check updated with status '${state}' on pull request ${pullRequestUrl} .`})
+  res.status(200).json({
+    message: `github check updated with status '${state}' on pull request ${pullRequestUrl} .`
+  })
 }

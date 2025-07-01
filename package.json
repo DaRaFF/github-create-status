@@ -3,19 +3,19 @@
   "version": "1.0.0",
   "bin": "./gh-release-branch-status.js",
   "main": "./gh-release-branch-status.js",
-  "engines" : { 
-    "node" : ">=16.0.0"
+  "engines": {
+    "node": ">=16.0.0"
   },
   "scripts": {
     "test": "GH_TOKEN=1234 mocha"
   },
   "dependencies": {
     "lodash": "^4.17.4",
+    "moment": "^2.24.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
-    "semver": "5.5.1",
     "semantic-release-conventional-commits": "latest",
-    "moment": "^2.24.0"
+    "semver": "5.5.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
