@@ -20,10 +20,12 @@ const commitConfig = {
 
 // main application
 module.exports = async (req, res) => {
+  console.log('Semantic Release API called with:', req.method, req.url, req.body)
+
   try {
     await run(req, res)
   } catch (error) {
-    console.log('error', error)
+    console.error('Semantic Release API Error:', error)
     return res.status(400).json({error: error.message})
   }
 }
@@ -32,13 +34,17 @@ async function run(req, res) {
   let state
   const {repository, sha} = req.body
 
+  console.log(`Processing request for repository: ${repository}, sha: ${sha}`)
+
   if (!isValidRepository(repository, res)) return
   if (!isValidSha(sha, res)) return
 
   const pullRequests = await getPullBySha({repository, token, sha})
+
   const pullRequestNumber = _.get(pullRequests, '[0].number', false)
 
   if (!pullRequestNumber) {
+    console.log(`No pull request found for SHA '${sha}' in repository '${repository}'`)
     return res.status(401).json({message: `no pull request found with commit ${sha} `})
   }
 
@@ -63,7 +69,8 @@ async function run(req, res) {
   }
 
   await createCommitStatus({repository, token, sha, state})
+  console.log(`GitHub check updated with status '${state}' on pull request ${pullRequestUrl} .`)
   res.status(200).json({
-    message: `github check updated with status '${state}' on pull request ${pullRequestUrl} .`
+    message: `GitHub check updated with status '${state}' on pull request ${pullRequestUrl} .`
   })
 }
