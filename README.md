@@ -32,13 +32,7 @@ steps:
           -X POST https://gh-release-branch-status.vercel.app)
 ```
 
-### 2) Update github-create-status repo
-
-1. Go to https://github.com/DaRaFF/github-create-status
-2. Add your MSP repository info to `allowed_repositories.js` and create/merge the PR on Github
-3. The change will be deployed automatically within 1-2 mins to Vercel
-
-### 3) Trigger the repo (one time)
+### 2) Trigger the repo (one time)
 
 To enable the whole Semantic Release mechanism, you have to trigger the MSP repo one time with:
 

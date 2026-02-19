@@ -3,7 +3,7 @@
 const _ = require('lodash')
 const assert = require('assert')
 const conventionalCommits = require('semantic-release-conventional-commits')
-const {isValidSha, isValidRepository} = require('../lib/validation')
+const {isValidSha} = require('../lib/validation')
 const isReleaseBranch = require('../lib/is_release_branch')
 const getPullBySha = require('../lib/git/get_pull_by_sha')
 const getPull = require('../lib/git/get_pull')
@@ -36,7 +36,6 @@ async function run(req, res) {
 
   console.log(`Processing request for repository: ${repository}, sha: ${sha}`)
 
-  if (!isValidRepository(repository, res)) return
   if (!isValidSha(sha, res)) return
 
   const pullRequests = await getPullBySha({repository, token, sha})
