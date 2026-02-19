@@ -5,6 +5,7 @@ const assert = require('assert')
 const conventionalCommits = require('semantic-release-conventional-commits')
 const {isValidSha} = require('../lib/validation')
 const isReleaseBranch = require('../lib/is_release_branch')
+const mapRepository = require('../lib/map_repository')
 const getPullBySha = require('../lib/git/get_pull_by_sha')
 const getPull = require('../lib/git/get_pull')
 const getCommitByPull = require('../lib/git/get_commit_by_pull')
@@ -33,9 +34,12 @@ module.exports = async (req, res) => {
 async function run(req, res) {
   let state
   const sha = req.body.sha
-  const repository = req.body.repository
+  const originalRepository = req.body.repository
+  const repository = mapRepository(originalRepository)
 
-  console.log(`Processing request for repository: ${repository}, sha: ${sha}`)
+  console.log(
+    `Processing request for repository: ${repository}, original repository: ${originalRepository}, sha: ${sha}`
+  )
 
   if (!isValidSha(sha, res)) return
 
