@@ -32,7 +32,8 @@ module.exports = async (req, res) => {
 
 async function run(req, res) {
   let state
-  const {repository, sha} = req.body
+  const sha = req.body.sha
+  const repository = req.body.repository
 
   console.log(`Processing request for repository: ${repository}, sha: ${sha}`)
 
